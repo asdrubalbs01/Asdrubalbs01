@@ -1,0 +1,5 @@
+Flask
+yt-dlp
+ffmpeg-python
+basic-pitch[onnx]
+torchaudio

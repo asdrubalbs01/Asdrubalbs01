@@ -1,5 +1,11 @@
 ## Hi there 👋
 
+To enable ONNX support for Basic Pitch run:
+
+```bash
+pip install 'basic-pitch[onnx]'
+```
+
 <!--
 **asdrubalbs01/Asdrubalbs01** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
