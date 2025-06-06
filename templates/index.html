@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube to MIDI</title>
+</head>
+<body>
+    <h1>YouTube to MIDI Converter</h1>
+    <form method="post">
+        <input type="text" name="youtube_url" placeholder="Enter YouTube URL" required>
+        <button type="submit">Convert</button>
+    </form>
+    {% if midi_ready %}
+        <p><a href="{{ url_for('download') }}">Download MIDI</a></p>
+    {% endif %}
+</body>
+</html>
