@@ -1,16 +1,98 @@
-## Hi there 👋
+# Convertisseur de partitions PDF vers MusicXML (MuseScore)
 
-<!--
-**asdrubalbs01/Asdrubalbs01** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Application web Flask permettant de convertir un PDF de partition en fichier MusicXML compatible MuseScore grâce à un outil d'OCR musical (Audiveris par défaut).
 
-Here are some ideas to get you started:
+## Fonctionnalités
+- Formulaire web simple pour téléverser un PDF.
+- Conversion serveur via une commande OMR (Audiveris suggéré) et génération d'un fichier `.musicxml` ou `.mxl`.
+- Lien de téléchargement direct après conversion.
+- Gestion des erreurs courantes (pas de fichier, format incorrect, échec de conversion).
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## Prérequis
+- Python 3.10 ou supérieur.
+- Un outil d'OCR musical installé sur la machine (Audiveris recommandé).
+
+### Installation d'Audiveris (exemple)
+1. Installez Java JDK 11 ou supérieur.
+2. Téléchargez Audiveris depuis <https://github.com/Audiveris/audiveris/releases> (version CLI recommandée).
+3. Ajoutez le binaire `audiveris` à votre `PATH` pour qu'il soit accessible depuis le terminal.
+4. Vérifiez l'installation :
+   ```bash
+   audiveris -version
+   ```
+
+> Vous pouvez remplacer Audiveris par tout outil OMR capable de produire du MusicXML ; adaptez alors la commande dans `app.py` (fonction `build_conversion_command`).
+
+## Installation locale
+1. Clonez le dépôt puis placez-vous dedans :
+   ```bash
+   git clone <votre-depot.git>
+   cd <votre-depot>
+   ```
+2. Vérifiez les dépendances système :
+   ```bash
+   java -version
+   audiveris -version  # doit répondre si Audiveris est correctement installé et présent dans le PATH
+   ```
+   Si Audiveris n'est pas disponible, activez le **mode démo** décrit plus bas pour tester l'interface sans dépendance.
+3. Créez (facultatif) un environnement virtuel puis installez les dépendances Python :
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # Windows : .venv\\Scripts\\activate
+   pip install -r requirements.txt
+   ```
+4. Lancez le serveur Flask (écoute sur `0.0.0.0` avec le port 5000 par défaut) :
+   ```bash
+   python app.py
+   ```
+5. Ouvrez l'application : <http://127.0.0.1:5000/> (ou `http://<adresse_machine>:5000/` si vous testez depuis un autre poste).
+
+Les fichiers envoyés sont placés dans `uploads/` et les fichiers MusicXML générés dans `output/`.
+
+### Mode démo (sans Audiveris)
+Pour valider rapidement le workflow sans installer Audiveris, vous pouvez créer un fichier MusicXML minimal grâce au mode démo :
+```bash
+ENABLE_MOCK_CONVERSION=1 python app.py
+```
+Un fichier MusicXML simplifié sera généré à chaque envoi de PDF. Désactivez ce mode (`ENABLE_MOCK_CONVERSION=0`) une fois Audiveris installé pour lancer la vraie conversion.
+
+## Commande de conversion utilisée
+Par défaut (modifiable dans `app.py`), la commande exécutée est :
+```bash
+audiveris -batch -export -output output/ chemin/vers/fichier.pdf
+```
+Assurez-vous que le binaire `audiveris` est disponible dans votre `PATH`. Les fichiers générés (ex. `*.musicxml` ou `*.mxl`) sont ensuite proposés en téléchargement.
+
+## Déploiement sur Render.com
+1. Créez un compte sur <https://render.com/>.
+2. Poussez ce projet sur un dépôt Git accessible (GitHub, GitLab, etc.).
+3. Depuis le tableau de bord Render, créez un **New Web Service** et reliez-le à votre dépôt.
+4. Choisissez l'environnement **Python**.
+5. Commande de démarrage :
+   ```bash
+   gunicorn app:app
+   ```
+6. Render installe automatiquement les paquets listés dans `requirements.txt`.
+7. Une fois le déploiement terminé, une URL publique sera disponible, par exemple :
+   ```
+   https://mon-convertisseur-partitions.onrender.com
+   ```
+   Utilisez ce lien pour accéder à la page de conversion en ligne.
+
+## Structure du projet
+```
+app.py
+Procfile
+requirements.txt
+uploads/        # PDF reçus
+output/         # Fichiers MusicXML générés
+templates/
+  index.html
+static/
+  style.css
+```
+
+## Notes
+- Assurez-vous que le serveur dispose des dépendances nécessaires à l'outil OMR (Java pour Audiveris, etc.).
+- Pour renforcer la sécurité en production, définissez la variable d'environnement `FLASK_SECRET_KEY`.
+- Les répertoires `uploads/` et `output/` peuvent être purgés périodiquement selon vos besoins.

@@ -1,0 +1,22 @@
+body {
+    background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
+}
+
+.card {
+    border: none;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.alert {
+    margin-bottom: 0.75rem;
+}
