@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Convertir un PDF de partition en MuseScore (MusicXML)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="h3 mb-4 text-center">Convertir un PDF de partition en MuseScore (MusicXML)</h1>
+                    <p class="text-muted text-center">Chargez votre PDF puis cliquez sur "Convertir" pour obtenir un fichier compatible MuseScore.</p>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form action="{{ url_for('convert') }}" method="post" enctype="multipart/form-data" class="mt-4">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Fichier PDF</label>
+                            <input class="form-control" type="file" id="file" name="file" accept=".pdf" required>
+                            <div class="form-text">Formats acceptés : PDF scanné ou exporté.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Convertir en MuseScore</button>
+                    </form>
+
+                    {% if download_url %}
+                        <div class="alert alert-success mt-4" role="alert">
+                            Conversion réussie !
+                            <a class="alert-link" href="{{ download_url }}">Cliquez ici pour télécharger le fichier MusicXML ({{ output_filename }}).</a>
+                        </div>
+                    {% endif %}
+
+                    <div class="mt-4 text-muted small">
+                        <p>La conversion utilise un outil d'OCR musical (Audiveris par défaut). Le temps de traitement peut varier selon la taille de la partition.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

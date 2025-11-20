@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.mxl
+*.musicxml
+*.xml
+uploads/*
+!uploads/.gitkeep
+output/*
+!output/.gitkeep
+.venv/
+ENV/
+.env
