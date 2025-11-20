@@ -29,19 +29,32 @@ Application web Flask permettant de convertir un PDF de partition en fichier Mus
    git clone <votre-depot.git>
    cd <votre-depot>
    ```
-2. Créez (facultatif) un environnement virtuel puis installez les dépendances :
+2. Vérifiez les dépendances système :
+   ```bash
+   java -version
+   audiveris -version  # doit répondre si Audiveris est correctement installé et présent dans le PATH
+   ```
+   Si Audiveris n'est pas disponible, activez le **mode démo** décrit plus bas pour tester l'interface sans dépendance.
+3. Créez (facultatif) un environnement virtuel puis installez les dépendances Python :
    ```bash
    python -m venv .venv
    source .venv/bin/activate  # Windows : .venv\\Scripts\\activate
    pip install -r requirements.txt
    ```
-3. Lancez le serveur Flask :
+4. Lancez le serveur Flask (écoute sur `0.0.0.0` avec le port 5000 par défaut) :
    ```bash
    python app.py
    ```
-4. Ouvrez l'application : <http://127.0.0.1:5000/>.
+5. Ouvrez l'application : <http://127.0.0.1:5000/> (ou `http://<adresse_machine>:5000/` si vous testez depuis un autre poste).
 
 Les fichiers envoyés sont placés dans `uploads/` et les fichiers MusicXML générés dans `output/`.
+
+### Mode démo (sans Audiveris)
+Pour valider rapidement le workflow sans installer Audiveris, vous pouvez créer un fichier MusicXML minimal grâce au mode démo :
+```bash
+ENABLE_MOCK_CONVERSION=1 python app.py
+```
+Un fichier MusicXML simplifié sera généré à chaque envoi de PDF. Désactivez ce mode (`ENABLE_MOCK_CONVERSION=0`) une fois Audiveris installé pour lancer la vraie conversion.
 
 ## Commande de conversion utilisée
 Par défaut (modifiable dans `app.py`), la commande exécutée est :

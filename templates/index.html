@@ -24,6 +24,13 @@
                         {% endif %}
                     {% endwith %}
 
+                    {% if mock_mode %}
+                        <div class="alert alert-warning" role="alert">
+                            Mode démo actif : un fichier MusicXML minimal sera généré sans Audiveris.
+                            Définissez <code>ENABLE_MOCK_CONVERSION=0</code> pour lancer la vraie conversion avec l'outil OMR installé.
+                        </div>
+                    {% endif %}
+
                     <form action="{{ url_for('convert') }}" method="post" enctype="multipart/form-data" class="mt-4">
                         <div class="mb-3">
                             <label for="file" class="form-label">Fichier PDF</label>
@@ -42,6 +49,7 @@
 
                     <div class="mt-4 text-muted small">
                         <p>La conversion utilise un outil d'OCR musical (Audiveris par défaut). Le temps de traitement peut varier selon la taille de la partition.</p>
+                        <p>Vérifiez <code>java -version</code> et <code>audiveris -version</code> pour confirmer l'installation avant de lancer en mode réel.</p>
                     </div>
                 </div>
             </div>
